@@ -14,5 +14,4 @@ class my_build_ext(build_ext):
         build_ext.build_extensions(self)
 
 setup(cmdclass = {'build_ext': my_build_ext},
-      ext_modules=cythonize("tree.pyx", language_level="3"),
-      include_dirs=['/u/samsstud/local/include/EIGEN'])
+      ext_modules=cythonize("tree.pyx", language_level="3"))
