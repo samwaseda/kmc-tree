@@ -69,7 +69,6 @@ class TestTree(unittest.TestCase):
         self.assertAlmostEqual(tree.get_kappa(), np.sum(kappa))
 
     def test_pearson(self):
-        tree = Tree()
         n_atoms = 100
         tree = Tree()
         kappa = np.random.rand(n_atoms*4).reshape(-1, 4)
