@@ -1,6 +1,7 @@
 from TREE.tree import Tree
 import numpy as np
 import unittest
+from scipy.stats import pearsonr
 
 class TestTree(unittest.TestCase):
     def test_numbering(self):
@@ -66,6 +67,24 @@ class TestTree(unittest.TestCase):
             kappa[index] = np.random.rand()
             tree.append([kappa[index]], [index])
         self.assertAlmostEqual(tree.get_kappa(), np.sum(kappa))
+
+    def test_pearson(self):
+        tree = Tree()
+        n_atoms = 100
+        tree = Tree()
+        kappa = np.random.rand(n_atoms*4).reshape(-1, 4)
+        index_lst = []
+        tree.append(kappa, np.arange(n_atoms))
+        for _ in range(1_000_000):
+            tree.choose_event(np.random.rand())
+            index = tree.get_index()
+            index_lst.append([tree.get_index(), tree.get_jump_id()])
+            tree.update_kappa(kappa[index])
+        index_lst = np.array(index_lst)
+        ind, count = np.unique(index_lst[:,0]*4+index_lst[:,1], return_counts=True)
+        count = count/np.sum(count)
+        p = kappa.flatten()[ind]/np.sum(kappa.flatten()[ind])
+        self.assertGreater(pearsonr(count, p)[0], 0.99)
 
 if __name__ == "__main__":
     unittest.main()
